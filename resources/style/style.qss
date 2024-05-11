@@ -1,0 +1,62 @@
+/*------------------------------*/
+/* Containers                   */
+/*------------------------------*/
+
+QWidget
+{
+    color: #FFA500;
+    background-color: #242424;
+}
+
+/*------------------------------*/
+/* QPushButton                  */
+/*------------------------------*/
+
+QPushButton
+{
+    color: #FFA500;
+    background-color: #2B5370;
+    border: 2px solid #FFA500;
+    border-radius: 8px;
+    padding: 8px;
+    margin: 10px;
+}
+
+QPushButton::hover
+{
+    background-color: #496F8E;
+}
+
+QPushButton::pressed
+{
+    background-color: #2B5370;
+}
+
+/*------------------------------*/
+/* QLabel                       */
+/*------------------------------*/
+
+QLabel
+{
+    color: #FFFFFF;
+    background-color: #222222;
+    border: 1px solid #2B5370;
+    border-bottom-left-radius: 15px;
+    border-top-right-radius: 15px;
+    qproperty-alignment: AlignCenter;
+}
+
+/*------------------------------*/
+/* QLineEdit                    */
+/*------------------------------*/
+
+QLineEdit
+{
+    color: #FFFFFF;
+    background-color: #3F3F3F;
+    selection-background-color: #2B5370;
+    border: 2px solid #FFA500;
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    height: 25px;
+}
