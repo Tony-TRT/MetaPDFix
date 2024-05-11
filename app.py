@@ -2,7 +2,7 @@
 Main application file.
 """
 
-from PySide6.QtWidgets import QApplication
+from PySide6 import QtWidgets
 
 from packages.ui.aesthetic import AestheticWindow
 
@@ -71,7 +71,16 @@ class MainWindow(AestheticWindow):
     def ui_manage_layouts(self) -> None:
         """Layouts are managed here."""
 
-        ...
+        self.main_layout = QtWidgets.QVBoxLayout(self)
+        self.btn_layout = QtWidgets.QHBoxLayout()
+        self.main_tg_layout = QtWidgets.QHBoxLayout()
+        self.left_tg_layout = QtWidgets.QVBoxLayout()
+        self.right_tg_layout = QtWidgets.QVBoxLayout()
+
+        self.main_layout.addLayout(self.btn_layout)
+        self.main_layout.addLayout(self.main_tg_layout)
+        self.main_tg_layout.addLayout(self.left_tg_layout)
+        self.main_tg_layout.addLayout(self.right_tg_layout)
 
     def ui_manage_widgets(self) -> None:
         """Widgets are managed here."""
@@ -85,7 +94,7 @@ class MainWindow(AestheticWindow):
 
 
 if __name__ == '__main__':
-    root = QApplication()
+    root = QtWidgets.QApplication()
     application = MainWindow()
     application.show()
     root.exec()
