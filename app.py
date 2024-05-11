@@ -68,7 +68,10 @@ class MainWindow(AestheticWindow):
     def ui_manage_icons(self) -> None:
         """Icons are managed here."""
 
-        ...
+        self.setWindowIcon(self.icons.get("logo"))
+        self.btn_open.setIcon(self.icons.get("open"))
+        self.btn_clear.setIcon(self.icons.get("clear"))
+        self.btn_save.setIcon(self.icons.get("save"))
 
     def ui_manage_layouts(self) -> None:
         """Layouts are managed here."""
