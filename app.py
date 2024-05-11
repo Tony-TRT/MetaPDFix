@@ -34,19 +34,21 @@ class MainWindow(AestheticWindow):
         self.btn_open = None
         self.btn_clear = None
         self.btn_save = None
+        self.lbl_filename = None
         self.lbl_title = None
         self.lbl_author = None
-        self.lbl_subject = None
-        self.lbl_creator = None
         self.lbl_creation_date = None
+        self.lbl_subject = None
         self.lbl_modification_date = None
+        self.lbl_creator = None
         self.lbl_producer = None
+        self.le_filename = None
         self.le_title = None
         self.le_author = None
-        self.le_subject = None
-        self.le_creator = None
         self.le_creation_date = None
+        self.le_subject = None
         self.le_modification_date = None
+        self.le_creator = None
         self.le_producer = None
 
         self.ui_manage_widgets()
@@ -85,7 +87,45 @@ class MainWindow(AestheticWindow):
     def ui_manage_widgets(self) -> None:
         """Widgets are managed here."""
 
-        ...
+        self.btn_open = QtWidgets.QPushButton("Open")
+        self.btn_clear = QtWidgets.QPushButton("Clear")
+        self.btn_save = QtWidgets.QPushButton("Save")
+        self.lbl_filename = QtWidgets.QLabel("Filename")
+        self.lbl_title = QtWidgets.QLabel("Title")
+        self.lbl_author = QtWidgets.QLabel("Author")
+        self.lbl_creation_date = QtWidgets.QLabel("Creation date")
+        self.lbl_subject = QtWidgets.QLabel("Subject")
+        self.lbl_modification_date = QtWidgets.QLabel("Modification date")
+        self.lbl_creator = QtWidgets.QLabel("Creator")
+        self.lbl_producer = QtWidgets.QLabel("Producer")
+        self.le_filename = QtWidgets.QLineEdit()
+        self.le_title = QtWidgets.QLineEdit()
+        self.le_author = QtWidgets.QLineEdit()
+        self.le_creation_date = QtWidgets.QLineEdit()
+        self.le_subject = QtWidgets.QLineEdit()
+        self.le_modification_date = QtWidgets.QLineEdit()
+        self.le_creator = QtWidgets.QLineEdit()
+        self.le_producer = QtWidgets.QLineEdit()
+
+        self.btn_layout.addWidget(self.btn_open)
+        self.btn_layout.addWidget(self.btn_clear)
+        self.btn_layout.addWidget(self.btn_save)
+        self.left_tg_layout.addWidget(self.lbl_filename)
+        self.left_tg_layout.addWidget(self.le_filename)
+        self.left_tg_layout.addWidget(self.lbl_author)
+        self.left_tg_layout.addWidget(self.le_author)
+        self.left_tg_layout.addWidget(self.lbl_subject)
+        self.left_tg_layout.addWidget(self.le_subject)
+        self.left_tg_layout.addWidget(self.lbl_creator)
+        self.left_tg_layout.addWidget(self.le_creator)
+        self.right_tg_layout.addWidget(self.lbl_title)
+        self.right_tg_layout.addWidget(self.le_title)
+        self.right_tg_layout.addWidget(self.lbl_creation_date)
+        self.right_tg_layout.addWidget(self.le_creation_date)
+        self.right_tg_layout.addWidget(self.lbl_modification_date)
+        self.right_tg_layout.addWidget(self.le_modification_date)
+        self.right_tg_layout.addWidget(self.lbl_producer)
+        self.right_tg_layout.addWidget(self.le_producer)
 
     def logic_connect_widgets(self) -> None:
         """Connections are managed here."""
