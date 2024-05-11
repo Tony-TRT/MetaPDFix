@@ -13,7 +13,7 @@ class MainWindow(AestheticWindow):
 
         super().__init__()
         self.setWindowTitle("MetaPDFix")
-        self.setFixedSize(500, 600)
+        self.setFixedSize(500, 550)
 
         ##################################################
         # Layouts.
