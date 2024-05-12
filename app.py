@@ -150,16 +150,18 @@ class MainWindow(AestheticWindow):
             clear (bool): Clear all fields if True.
         """
 
+        if self.current_file is None:
+            return
+
         self.le_filename.setText(self.current_file.stem)
         pdf: pdfrw.PdfReader = pdfrw.PdfReader(self.current_file)
+
+        for QLineEdit in self.fields:
+            QLineEdit.setText(getattr(pdf.Info, QLineEdit.tag))
 
         if clear:
             for QLineEdit in self.fields:
                 QLineEdit.clear()
-            return
-
-        for QLineEdit in self.fields:
-            QLineEdit.setText(getattr(pdf.Info, QLineEdit.tag))
 
     def logic_connect_widgets(self) -> None:
         """Connections are managed here."""
