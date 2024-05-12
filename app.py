@@ -130,8 +130,22 @@ class MainWindow(AestheticWindow):
         self.right_tg_layout.addWidget(self.lbl_producer)
         self.right_tg_layout.addWidget(self.le_producer)
 
+    def logic_clear_tags(self):
+
+        ...
+
     def logic_connect_widgets(self) -> None:
         """Connections are managed here."""
+
+        self.btn_open.clicked.connect(self.logic_open_file)
+        self.btn_clear.clicked.connect(self.logic_clear_tags)
+        self.btn_save.clicked.connect(self.logic_save_file)
+
+    def logic_open_file(self):
+
+        ...
+
+    def logic_save_file(self):
 
         ...
 
