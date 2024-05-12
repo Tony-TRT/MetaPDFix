@@ -181,9 +181,21 @@ class MainWindow(AestheticWindow):
             self.current_file = Path(file)
             self.ui_update_tags()
 
-    def logic_save_file(self):
+    def logic_save_file(self) -> None:
+        """Saves the current PDF file with updated metadata."""
 
-        ...
+        if self.current_file is None:
+            return
+
+        new_location: tuple[Path, str] = (self.current_file, self.le_filename.text())
+        file: pdfrw.PdfReader = pdfrw.PdfReader(self.current_file)
+        metadata: dict = {QLineEdit.tag: QLineEdit.text() for QLineEdit in self.fields}
+        success: bool = toolkit.overwrite_metadata(new_location=new_location, file=file, metadata=metadata)
+
+        if success:
+            # Display success dialog
+            return
+        # Display error dialog
 
     @property
     def fields(self):
