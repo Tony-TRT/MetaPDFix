@@ -6,6 +6,7 @@ import pdfrw
 from PySide6 import QtWidgets
 
 from packages.ui.aesthetic import AestheticWindow
+from packages.logic import toolkit
 
 
 class MainWindow(AestheticWindow):
