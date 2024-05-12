@@ -2,6 +2,7 @@
 Main application file.
 """
 
+from functools import partial
 from pathlib import Path
 
 import pdfrw
@@ -142,32 +143,29 @@ class MainWindow(AestheticWindow):
         self.right_tg_layout.addWidget(self.lbl_producer)
         self.right_tg_layout.addWidget(self.le_producer)
 
-    def ui_update_tags(self, file: str) -> None:
-        """Updates the UI fields with metadata tags extracted from the given PDF file.
+    def ui_update_tags(self, clear: bool = False) -> None:
+        """Updates the fields with the metadata of the currently edited PDF.
 
         Args:
-            file (str): The path of the PDF file from which metadata tags will be extracted.
+            clear (bool): Clear all fields if True.
         """
 
-        filename: str = Path(file).stem
-        pdf: pdfrw.PdfReader = pdfrw.PdfReader(file)
+        self.le_filename.setText(self.current_file.stem)
+        pdf: pdfrw.PdfReader = pdfrw.PdfReader(self.current_file)
+
+        if clear:
+            for QLineEdit in self.fields:
+                QLineEdit.clear()
+            return
 
         for QLineEdit in self.fields:
             QLineEdit.setText(getattr(pdf.Info, QLineEdit.tag))
-        self.le_filename.setText(filename)
-
-    def logic_clear_tags(self) -> None:
-        """This method clears the text displayed in each QLineEdit object."""
-
-        for QLineEdit in self.fields:
-            QLineEdit.clear()
-        self.le_filename.clear()
 
     def logic_connect_widgets(self) -> None:
         """Connections are managed here."""
 
         self.btn_open.clicked.connect(self.logic_open_file)
-        self.btn_clear.clicked.connect(self.logic_clear_tags)
+        self.btn_clear.clicked.connect(partial(self.ui_update_tags, True))
         self.btn_save.clicked.connect(self.logic_save_file)
 
     def logic_open_file(self) -> None:
@@ -178,8 +176,8 @@ class MainWindow(AestheticWindow):
         file, _ = QtWidgets.QFileDialog.getOpenFileName(self, caption=caption, dir="", filter=file_filter)
 
         if toolkit.check_file(file=file):
-            self.current_file = file
-            self.ui_update_tags(file=file)
+            self.current_file = Path(file)
+            self.ui_update_tags()
 
     def logic_save_file(self):
 
