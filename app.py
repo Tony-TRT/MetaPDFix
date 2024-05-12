@@ -2,6 +2,7 @@
 Main application file.
 """
 
+import pdfrw
 from PySide6 import QtWidgets
 
 from packages.ui.aesthetic import AestheticWindow
@@ -141,9 +142,16 @@ class MainWindow(AestheticWindow):
         self.btn_clear.clicked.connect(self.logic_clear_tags)
         self.btn_save.clicked.connect(self.logic_save_file)
 
-    def logic_open_file(self):
+    def logic_open_file(self) -> None:
+        """Opens a file dialog to select a PDF file and updates the UI with the selected file's tags."""
 
-        ...
+        caption: str = "Select PDF File"
+        file_filter: str = "PDF Files (*.pdf)"
+        file, _ = QtWidgets.QFileDialog.getOpenFileName(self, caption=caption, dir="", filter=file_filter)
+
+        if toolkit.check_file(file=file):
+            validated_file: pdfrw.PdfReader = pdfrw.PdfReader(file)
+            self.ui_update_tags(file=validated_file)
 
     def logic_save_file(self):
 
