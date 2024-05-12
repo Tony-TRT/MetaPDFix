@@ -18,6 +18,7 @@ class MainWindow(AestheticWindow):
         super().__init__()
         self.setWindowTitle("MetaPDFix")
         self.setFixedSize(500, 550)
+        self.current_file = None
 
         ##################################################
         # Layouts.
@@ -155,9 +156,12 @@ class MainWindow(AestheticWindow):
             QLineEdit.setText(getattr(pdf.Info, QLineEdit.tag))
         self.le_filename.setText(filename)
 
-    def logic_clear_tags(self):
+    def logic_clear_tags(self) -> None:
+        """This method clears the text displayed in each QLineEdit object."""
 
-        ...
+        for QLineEdit in self.fields:
+            QLineEdit.clear()
+        self.le_filename.clear()
 
     def logic_connect_widgets(self) -> None:
         """Connections are managed here."""
@@ -174,6 +178,7 @@ class MainWindow(AestheticWindow):
         file, _ = QtWidgets.QFileDialog.getOpenFileName(self, caption=caption, dir="", filter=file_filter)
 
         if toolkit.check_file(file=file):
+            self.current_file = file
             self.ui_update_tags(file=file)
 
     def logic_save_file(self):
