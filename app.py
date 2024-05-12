@@ -2,6 +2,8 @@
 Main application file.
 """
 
+from pathlib import Path
+
 import pdfrw
 from PySide6 import QtWidgets
 
@@ -105,12 +107,19 @@ class MainWindow(AestheticWindow):
         self.lbl_producer = QtWidgets.QLabel("Producer")
         self.le_filename = QtWidgets.QLineEdit()
         self.le_title = QtWidgets.QLineEdit()
+        self.le_title.tag = "Title"
         self.le_author = QtWidgets.QLineEdit()
+        self.le_author.tag = "Author"
         self.le_creation_date = QtWidgets.QLineEdit()
+        self.le_creation_date.tag = "CreationDate"
         self.le_subject = QtWidgets.QLineEdit()
+        self.le_subject.tag = "Subject"
         self.le_modification_date = QtWidgets.QLineEdit()
+        self.le_modification_date.tag = "ModDate"
         self.le_creator = QtWidgets.QLineEdit()
+        self.le_creator.tag = "Creator"
         self.le_producer = QtWidgets.QLineEdit()
+        self.le_producer.tag = "Producer"
 
         self.btn_layout.addWidget(self.btn_open)
         self.btn_layout.addWidget(self.btn_clear)
@@ -132,6 +141,20 @@ class MainWindow(AestheticWindow):
         self.right_tg_layout.addWidget(self.lbl_producer)
         self.right_tg_layout.addWidget(self.le_producer)
 
+    def ui_update_tags(self, file: str) -> None:
+        """Updates the UI fields with metadata tags extracted from the given PDF file.
+
+        Args:
+            file (str): The path of the PDF file from which metadata tags will be extracted.
+        """
+
+        filename: str = Path(file).stem
+        pdf: pdfrw.PdfReader = pdfrw.PdfReader(file)
+
+        for QLineEdit in self.fields:
+            QLineEdit.setText(getattr(pdf.Info, QLineEdit.tag))
+        self.le_filename.setText(filename)
+
     def logic_clear_tags(self):
 
         ...
@@ -144,19 +167,26 @@ class MainWindow(AestheticWindow):
         self.btn_save.clicked.connect(self.logic_save_file)
 
     def logic_open_file(self) -> None:
-        """Opens a file dialog to select a PDF file and updates the UI with the selected file's tags."""
+        """Opens a file dialog to select a PDF file and updates the UI with the file's tags."""
 
         caption: str = "Select PDF File"
         file_filter: str = "PDF Files (*.pdf)"
         file, _ = QtWidgets.QFileDialog.getOpenFileName(self, caption=caption, dir="", filter=file_filter)
 
         if toolkit.check_file(file=file):
-            validated_file: pdfrw.PdfReader = pdfrw.PdfReader(file)
-            self.ui_update_tags(file=validated_file)
+            self.ui_update_tags(file=file)
 
     def logic_save_file(self):
 
         ...
+
+    @property
+    def fields(self):
+
+        return {
+            self.le_title, self.le_author, self.le_creation_date,
+            self.le_subject, self.le_modification_date, self.le_creator, self.le_producer
+        }
 
 
 if __name__ == '__main__':
