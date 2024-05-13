@@ -2,9 +2,14 @@
 Main application file.
 """
 
+from functools import partial
+from pathlib import Path
+
+import pdfrw
 from PySide6 import QtWidgets
 
 from packages.ui.aesthetic import AestheticWindow
+from packages.logic import toolkit
 
 
 class MainWindow(AestheticWindow):
@@ -14,6 +19,7 @@ class MainWindow(AestheticWindow):
         super().__init__()
         self.setWindowTitle("MetaPDFix")
         self.setFixedSize(500, 550)
+        self.current_file = None
 
         ##################################################
         # Layouts.
@@ -103,12 +109,19 @@ class MainWindow(AestheticWindow):
         self.lbl_producer = QtWidgets.QLabel("Producer")
         self.le_filename = QtWidgets.QLineEdit()
         self.le_title = QtWidgets.QLineEdit()
+        self.le_title.tag = "Title"
         self.le_author = QtWidgets.QLineEdit()
+        self.le_author.tag = "Author"
         self.le_creation_date = QtWidgets.QLineEdit()
+        self.le_creation_date.tag = "CreationDate"
         self.le_subject = QtWidgets.QLineEdit()
+        self.le_subject.tag = "Subject"
         self.le_modification_date = QtWidgets.QLineEdit()
+        self.le_modification_date.tag = "ModDate"
         self.le_creator = QtWidgets.QLineEdit()
+        self.le_creator.tag = "Creator"
         self.le_producer = QtWidgets.QLineEdit()
+        self.le_producer.tag = "Producer"
 
         self.btn_layout.addWidget(self.btn_open)
         self.btn_layout.addWidget(self.btn_clear)
@@ -130,10 +143,72 @@ class MainWindow(AestheticWindow):
         self.right_tg_layout.addWidget(self.lbl_producer)
         self.right_tg_layout.addWidget(self.le_producer)
 
+    def ui_update_tags(self, clear: bool = False) -> None:
+        """Updates the fields with the metadata of the currently edited PDF.
+
+        Args:
+            clear (bool): Clear all fields if True.
+        """
+
+        if self.current_file is None:
+            return
+
+        self.le_filename.setText(self.current_file.stem)
+        pdf: pdfrw.PdfReader = pdfrw.PdfReader(self.current_file)
+
+        for QLineEdit in self.fields:
+            QLineEdit.setText(getattr(pdf.Info, QLineEdit.tag))
+
+        if clear:
+            for QLineEdit in self.fields:
+                QLineEdit.clear()
+
     def logic_connect_widgets(self) -> None:
         """Connections are managed here."""
 
-        ...
+        self.btn_open.clicked.connect(self.logic_open_file)
+        self.btn_clear.clicked.connect(partial(self.ui_update_tags, True))
+        self.btn_save.clicked.connect(self.logic_save_file)
+
+    def logic_open_file(self) -> None:
+        """Opens a file dialog to select a PDF file and updates the UI with the file's tags."""
+
+        caption: str = "Select PDF File"
+        file_filter: str = "PDF Files (*.pdf)"
+        file, _ = QtWidgets.QFileDialog.getOpenFileName(self, caption=caption, dir="", filter=file_filter)
+
+        if toolkit.check_file(file=file):
+            self.current_file = Path(file)
+            self.ui_update_tags()
+        else:
+            error_message: str = "File doesn't exist or isn't a PDF."
+            QtWidgets.QMessageBox.critical(self, "File Issue", error_message)
+
+    def logic_save_file(self) -> None:
+        """Saves the current PDF file with updated metadata."""
+
+        if self.current_file is None:
+            return
+
+        new_location: tuple[Path, str] = (self.current_file, self.le_filename.text())
+        file: pdfrw.PdfReader = pdfrw.PdfReader(self.current_file)
+        metadata: dict = {QLineEdit.tag: QLineEdit.text() for QLineEdit in self.fields}
+        success: bool = toolkit.overwrite_metadata(new_location=new_location, file=file, metadata=metadata)
+
+        if success:
+            success_message: str = "Metadata has been successfully modified."
+            QtWidgets.QMessageBox.information(self, "Success", success_message)
+        else:
+            error_message: str = "Unable to overwrite metadata with the current values."
+            QtWidgets.QMessageBox.critical(self, "Error", error_message)
+
+    @property
+    def fields(self):
+
+        return {
+            self.le_title, self.le_author, self.le_creation_date,
+            self.le_subject, self.le_modification_date, self.le_creator, self.le_producer
+        }
 
 
 if __name__ == '__main__':

@@ -43,6 +43,7 @@ QLabel
     border: 1px solid #2B5370;
     border-bottom-left-radius: 15px;
     border-top-right-radius: 15px;
+    padding: 10px;
     qproperty-alignment: AlignCenter;
 }
 
