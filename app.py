@@ -206,8 +206,13 @@ class MainWindow(AestheticWindow):
     def fields(self):
 
         return {
-            self.le_title, self.le_author, self.le_creation_date,
-            self.le_subject, self.le_modification_date, self.le_creator, self.le_producer
+            self.le_title,
+            self.le_author,
+            self.le_creation_date,
+            self.le_subject,
+            self.le_modification_date,
+            self.le_creator,
+            self.le_producer
         }
 
 

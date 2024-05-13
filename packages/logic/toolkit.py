@@ -17,17 +17,15 @@ def check_file(file: str) -> bool:
         bool: True if the file exists and has a '.pdf' extension, False otherwise.
     """
 
-    file_exists: bool = Path(file).exists()
-    file_is_pdf: bool = file.casefold().endswith(".pdf")
-    return file_exists and file_is_pdf
+    return Path(file).exists() and file.casefold().endswith(".pdf")
 
 
-def overwrite_metadata(new_location: tuple[Path, str], file: pdfrw.pdfreader, metadata: dict) -> bool:
+def overwrite_metadata(new_location: tuple[Path, str], file: pdfrw.PdfReader, metadata: dict) -> bool:
     """Overwrites the metadata of a PDF file with new metadata.
 
     Args:
         new_location (tuple[Path, str]): A tuple containing the new location information.
-        file (pdfrw.pdfreader): The PDF file to modify.
+        file (pdfrw.PdfReader): The PDF file to modify.
         metadata (dict): A dictionary containing the metadata tags and their corresponding values to be overwritten.
 
     Returns:
