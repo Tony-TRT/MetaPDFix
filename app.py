@@ -180,6 +180,9 @@ class MainWindow(AestheticWindow):
         if toolkit.check_file(file=file):
             self.current_file = Path(file)
             self.ui_update_tags()
+        else:
+            error_message: str = "File doesn't exist or isn't a PDF."
+            QtWidgets.QMessageBox.critical(self, "File Issue", error_message)
 
     def logic_save_file(self) -> None:
         """Saves the current PDF file with updated metadata."""
@@ -193,9 +196,11 @@ class MainWindow(AestheticWindow):
         success: bool = toolkit.overwrite_metadata(new_location=new_location, file=file, metadata=metadata)
 
         if success:
-            # Display success dialog
-            return
-        # Display error dialog
+            success_message: str = "Metadata has been successfully modified."
+            QtWidgets.QMessageBox.information(self, "Success", success_message)
+        else:
+            error_message: str = "Unable to overwrite metadata with the current values."
+            QtWidgets.QMessageBox.critical(self, "Error", error_message)
 
     @property
     def fields(self):
